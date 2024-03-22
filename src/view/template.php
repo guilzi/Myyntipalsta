@@ -12,7 +12,7 @@
         <?php
           if (isset($_SESSION['user'])) {
             echo "<div>$_SESSION[user]</div>";
-            echo "<div><a href='historia'>Ostohistoria</a></div>";
+            echo "<div><a href='ostohistoria'>Ostohistoria</a></div>";
             echo "<div><a href='logout'>Kirjaudu ulos</a></div>";
           } else {
             echo "<div class='notsigned'><a href='lisaa_tili'>Rekisteröidy nyt</a></div>";

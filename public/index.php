@@ -102,6 +102,16 @@ switch ($request) {
         header("Location: tavarat");  
       }
       break;
+      case '/ostohistoria':
+        if ($loggeduser) {
+            require_once MODEL_DIR . 'osto.php';
+            $idhenkilo = $loggeduser['idhenkilo'];
+            $ostohistoria = ostoHistoria($idhenkilo);
+            echo $templates->render('ostohistoria', ['ostohistoria' => $ostohistoria]);
+        } else {
+            header("Location: kirjaudu.php");
+        }
+        break;
     case "/logout":
         require_once CONTROLLER_DIR . 'kirjaudu.php';
         logout();
