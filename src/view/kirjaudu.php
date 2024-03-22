@@ -17,4 +17,7 @@
   </div>
 </form>
 
-<div class="info">Eikö sinulla ole vielä tunnuksia? <a href="lisaa_tili">Rekisteröidy nyt.</a></div>
+<div class="info">
+  Eikö sinulla ole vielä tunnuksia? <a href="lisaa_tili">Rekisteröidy nyt.</a><br>
+  Jos olet unohtanut salasanasi, niin voit vaihtaa sen <a href="tilaa_vaihtoavain">täällä</a>.
+</div>

@@ -120,7 +120,7 @@ input[type=submit], .button {
 }
 
 .info {
-    background-color: #444444;
+    background-color: #3a4a6a;
     border: 1px solid #999;
     border-radius: 0.5rem;
     padding: 1rem;
@@ -129,7 +129,12 @@ input[type=submit], .button {
 }
 
 .info a {
-    color: #aaaaaa;
+    text-decoration: none;
+    color: #999;
+}
+
+.info a:hover {
+    color: white;
 }
 
 .flexarea {
