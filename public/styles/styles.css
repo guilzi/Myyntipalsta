@@ -14,9 +14,11 @@ html {
 
 body {
     background-color: #222222;
+    min-height: 100vh;
+    max-width: 40rem;
     margin: 0 auto;
-    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
-}
+    box-shadow: 0px 0px 25px rgba(0,0,0,0.5);
+  }
 
 header {
     background-color: #3a4a6a;
@@ -26,6 +28,8 @@ header {
     justify-content: space-between;
     align-items: center;
     font-size: 0.8rem;
+    text-shadow: 2px 2px black;
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
 }
 
 header h1 {
@@ -54,23 +58,13 @@ hr {
 }
 
 footer {
-    font-size: 0.8rem;
     text-align: center;
-    color: #999999;
-}
-
-.tapahtumat > div {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-}
-
-.tapahtumat > div > div:nth-child(3) {
-    text-align: right;
-}
-
-.tapahtumat > div {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    align-items: center;
+    color: #999999;
+    border-top: 1px solid #666;
+    padding-top: 10px;
 }
 
 form > div {
@@ -91,7 +85,7 @@ input {
 input[type=submit], .button {
     padding: 0.5rem 3rem;
     border-radius: 0.3rem;
-    background-color: #555555;
+    background-color: #3a4a6a;
     color: #ffffff;
     font-weight: bold;
     min-width: 12rem;
@@ -126,4 +120,95 @@ input[type=submit], .button {
 
 .button {
     text-decoration: none;
+}
+
+.profile {
+    text-align: center;
+    padding-top: 5px;
+}
+
+.tapahtumat {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    
+}
+
+.tapahtuma {
+    width: calc(100%);
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background-color: #333;
+}
+
+.tuote {
+    font-size: 1.5rem;
+}
+
+.pvm {
+    font-size: 0.8rem;
+}
+
+.hinta {
+    font-size: 2rem;
+    margin-top: 25px;
+    background-color: #666;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.tapahtumat button {
+    background-color: #3a4a6a;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+}
+
+.tapahtumat button:hover {
+    background-color: #506682;
+}
+
+.ostohistoria {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.ostohistoria > div {
+    width: calc(100%);
+    margin: 10px;
+    background-color: #333;
+    padding: 20px;
+    text-align: center;
+}
+
+.ostohistoria button {
+    padding: 0.5rem 3rem;
+    border-radius: 0.3rem;
+    background-color: #3a4a6a;
+    color: #ffffff;
+    font-weight: bold;
+    min-width: 12rem;
+    margin: 1rem auto;
+    text-align: center;
+    
+}
+
+.ostohistoria button:hover {
+    background-color: #506682;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
 }

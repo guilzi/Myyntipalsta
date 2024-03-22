@@ -26,7 +26,9 @@
     </section>
     <footer>
       <hr>
-      <div>Myyntipalsta by Yes</div>
+      <div>Seuraa meitä</div>
+      <div>Tietoja meistä</div>
+      <div>Yhteystiedot</div>
     </footer>
   </body>
 </html>
