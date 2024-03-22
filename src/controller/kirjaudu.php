@@ -1,11 +1,10 @@
 <?php
 
-  function tarkistaKirjautuminen($email="", $salasana="") {
+function tarkistaKirjautuminen($email="", $salasana="") {
 
-    // Haetaan käyttäjän tiedot sen sähköpostiosoitteella. 
+    // Haetaan käyttäjän tiedot sen sähköpostiosoitteella.
     require_once(MODEL_DIR . 'henkilo.php');
-    $tiedot = haeHenkiloSahkopostilla($email);
-    $tiedot = array_shift($tiedot);
+    $tiedot = haeHenkilo($email);
 
     // Tarkistetaan ensin löytyikö käyttäjä. Jos löytyi, niin
     // tarkistetaan täsmäävätkö salasanat.
@@ -16,12 +15,12 @@
     // Käyttäjää ei löytynyt tai salasana oli väärin. 
     return false;
 
-  }
+}
 
   function logout() {
 
-    // Tyhjennetään istuntomuuttujat.
-    $_SESSION = array();
+// Tyhjennetään istuntomuuttujat.
+$_SESSION = array();
 
     // Poistetaan istunnon eväste.
     if (ini_get("session.use_cookies")) {
@@ -32,9 +31,9 @@
       );
     }
 
-    // Tuhotaan vielä lopuksi istunto.
-    session_destroy();
+// Tuhotaan vielä lopuksi istunto.
+session_destroy();
 
-  }
+}
 
 ?>

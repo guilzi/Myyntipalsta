@@ -2,13 +2,17 @@
 
   require_once HELPERS_DIR . 'DB.php';
 
-  function lisaaHenkilo($nimi,$puhnro,$email,$discord,$salasana) {
+function lisaaHenkilo($nimi,$puhnro,$email,$discord,$salasana) {
     DB::run('INSERT INTO henkilo (nimi, puhnro, email, discord, salasana) VALUE  (?,?,?,?,?);',[$nimi,$puhnro,$email,$discord,$salasana]);
     return DB::lastInsertId();
- }
+}
 
- function haeHenkiloSahkopostilla($email) {
+function haeHenkiloSahkopostilla($email) {
   return DB::run('SELECT * FROM henkilo WHERE email = ?;', [$email])->fetchAll();
+}
+
+function haeHenkilo($email) {
+  return DB::run('SELECT * FROM henkilo WHERE email = ?;', [$email])->fetch();
 }
 
 //Lisätään myös puhelinnumero, jotta ei tulisi 
