@@ -6,9 +6,9 @@
 
 <div><?=$start->format('j.n.Y G:i')?></div>
 <h1><?=$tavara['nimi']?></h1>
-<div class='hinta'><?= $tavara['hinta'] ?>€</div>
-<img src='../tavaranmyynti/public/images/placeholder.png' alt='Placeholder Image'>
 <div><?=$tavara['kuvaus']?></div>
+<div class='hinta'><?= $tavara['hinta'] ?>€</div>
+<div class='kuva'><img src='../tavaranmyynti/public/images/placeholder.png' alt='Placeholder Image'></div>
 
 <?php
   if ($loggeduser) {
