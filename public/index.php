@@ -34,11 +34,19 @@ switch ($request) {
     break;
   case '/tavara':
     require_once MODEL_DIR . 'tavara.php';
+    require_once MODEL_DIR . 'osto.php';
     $tavara = haeTapahtuma($_GET['id']);
     if ($tavara) {
-      echo $templates->render('tavara',['tavara' => $tavara]);
-    } else {
-      echo $templates->render('tavaranotfound');
+      if ($loggeduser) {
+          $osto = haeIlmoittautuminen($loggeduser['idhenkilo'],$tavara['idtavara']);
+      } else {
+          $osto = NULL;
+         }
+      echo $templates->render('tavara',['tavara' => $tavara,
+                                             'osto' => $osto,
+                                             'loggeduser' => $loggeduser]);
+      } else {
+        echo $templates->render('tavaranotfound');
     }
     break;
     case '/lisaa_tili':
@@ -56,25 +64,49 @@ switch ($request) {
           echo $templates->render('lisaa_tili', ['formdata' => [], 'error' => []]);
           break;
         }
-        case "/kirjaudu":
-          if (isset($_POST['laheta'])) {
-            require_once CONTROLLER_DIR . 'kirjaudu.php';
-            if (tarkistaKirjautuminen($_POST['email'],$_POST['salasana'])) {
-              session_regenerate_id();
-              $_SESSION['user'] = $_POST['email'];
-              header("Location: " . $config['urls']['baseUrl']);
-            } else {
-              echo $templates->render('kirjaudu', [ 'error' => ['virhe' => 'Väärä käyttäjätunnus tai salasana!']]);
-            }
-          } else {
-            echo $templates->render('kirjaudu', [ 'error' => []]);
+    case "/kirjaudu":
+      if (isset($_POST['laheta'])) {
+        require_once CONTROLLER_DIR . 'kirjaudu.php';
+        if (tarkistaKirjautuminen($_POST['email'],$_POST['salasana'])) {
+          session_regenerate_id();
+          $_SESSION['user'] = $_POST['email'];
+          header("Location: " . $config['urls']['baseUrl']);
+        } else {
+           echo $templates->render('kirjaudu', [ 'error' => ['virhe' => 'Väärä käyttäjätunnus tai salasana!']]);
+        }
+        } else {
+          echo $templates->render('kirjaudu', [ 'error' => []]);
+      }
+    break;
+    case '/osto':
+      if ($_GET['id']) {
+        require_once MODEL_DIR . 'osto.php';
+        $idtavara = $_GET['id'];
+          if ($loggeduser) {
+            lisaaIlmoittautuminen($loggeduser['idhenkilo'],$idtavara);
           }
-          break;
-        case "/logout":
-            require_once CONTROLLER_DIR . 'kirjaudu.php';
-            logout();
-            header("Location: " . $config['urls']['baseUrl']);
-            break;
+          header("Location: tavara?id=$idtavara");
+          } else {
+          header("Location: tavarat");
+        }
+    break;
+    case '/peru':
+      if ($_GET['id']) {
+        require_once MODEL_DIR . 'osto.php';
+        $idtavara = $_GET['id'];
+        if ($loggeduser) {
+          poistaIlmoittautuminen($loggeduser['idhenkilo'],$idtavara);
+        }
+        header("Location: tavara?id=$idtavara");
+      } else {
+        header("Location: tavarat");  
+      }
+      break;
+    case "/logout":
+        require_once CONTROLLER_DIR . 'kirjaudu.php';
+        logout();
+        header("Location: " . $config['urls']['baseUrl']);
+        break;
     default:
       echo $templates->render('notfound');
   }    
