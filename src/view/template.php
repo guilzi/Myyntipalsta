@@ -7,7 +7,7 @@
   </head>
   <body>
   <header>
-      <h1><a href="<?=BASEURL?>">lanify</a></h1>
+      <h1><a href="<?=BASEURL?>">Myyntipalsta</a></h1>
       <div class="profile">
         <?php
           if (isset($_SESSION['user'])) {
