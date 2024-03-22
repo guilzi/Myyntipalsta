@@ -7,7 +7,19 @@
   </head>
   <body>
   <header>
-      <h1><a href="<?=BASEURL?>">Myyntipalsta</a></h1>
+      <h1><a href="<?=BASEURL?>">lanify</a></h1>
+      <div class="profile">
+        <?php
+          if (isset($_SESSION['user'])) {
+            echo "<div>$_SESSION[user]</div>";
+            echo "<div><a href='historia'>Ostohistoria</a></div>";
+            echo "<div><a href='logout'>Kirjaudu ulos</a></div>";
+          } else {
+            echo "<div class='notsigned'><a href='lisaa_tili'>Rekisteröidy nyt</a></div>";
+            echo "<div class='notsigned'><a href='kirjaudu'>Kirjaudu</a></div>";
+          }
+        ?>
+      </div>
     </header>
     <section>
       <?=$this->section('content')?>
