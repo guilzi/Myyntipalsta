@@ -16,7 +16,7 @@
       echo "<div class='flexarea'><a href='osto?id=$tavara[idtavara]' class='button'>Osta nyt</a></div>";    
     } else {
       echo "<div class='flexarea'>";
-      echo "<div>Kiitos ostoksestasi!</div>";
+      echo "<div>Mikäli haluat perua ostokseksi, klikkaa tästä!</div>";
       echo "<a href='peru?id=$tavara[idtavara]' class='button'>PERUUTA OSTO</a>";
       echo "</div>";
     }

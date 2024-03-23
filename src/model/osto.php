@@ -19,7 +19,8 @@ function ostoHistoria($idhenkilo) {
     $stmt = DB::run('SELECT osto.*, tavara.nimi, tavara.hinta 
                      FROM osto 
                      INNER JOIN tavara ON osto.idtavara = tavara.idtavara 
-                     WHERE idhenkilo = ?', 
+                     WHERE idhenkilo = ?
+                     ORDER BY aika DESC', 
                      [$idhenkilo]);
     return $stmt->fetchAll();
 }

@@ -29,9 +29,11 @@ switch ($request) {
   case '/':
   case '/tavarat':
     require_once MODEL_DIR . 'tavara.php';
-    $tavarat = haeTapahtumat();
-        echo $templates->render('tavarat',['tavarat' => $tavarat]);
-    break;
+    $sortBy = isset($_GET['sort']) ? $_GET['sort'] : 'newest';
+    $tavarat = haeTapahtumat($sortBy);
+    echo $templates->render('tavarat', ['tavarat' => $tavarat, 'sortBy' => $sortBy]);
+  break;
+
   case '/tavara':
     require_once MODEL_DIR . 'tavara.php';
     require_once MODEL_DIR . 'osto.php';
@@ -49,6 +51,7 @@ switch ($request) {
         echo $templates->render('tavaranotfound');
     }
     break;
+
     case '/lisaa_tili':
       if (isset($_POST['laheta'])) {
         $formdata = cleanArrayData($_POST);
@@ -83,7 +86,8 @@ switch ($request) {
           } else {
             echo $templates->render('kirjaudu', [ 'error' => []]);
           }
-          break;
+    break;
+
     case '/osto':
       if ($_GET['id']) {
         require_once MODEL_DIR . 'osto.php';
@@ -91,11 +95,14 @@ switch ($request) {
           if ($loggeduser) {
             lisaaIlmoittautuminen($loggeduser['idhenkilo'],$idtavara);
           }
-          header("Location: tavara?id=$idtavara");
+          echo $templates->render('kiitos');
+          header("refresh:5;url=" . $config['urls']['baseUrl']);
+          exit();
           } else {
           header("Location: tavarat");
         }
     break;
+
     case '/peru':
       if ($_GET['id']) {
         require_once MODEL_DIR . 'osto.php';
@@ -103,12 +110,14 @@ switch ($request) {
         if ($loggeduser) {
           poistaIlmoittautuminen($loggeduser['idhenkilo'],$idtavara);
         }
-        header("Location: tavara?id=$idtavara");
+        echo $templates->render('peru');
+        header("refresh:5;url=" . $config['urls']['baseUrl']);
       } else {
         header("Location: tavarat");  
       }
-      break;
-      case '/ostohistoria':
+    break;
+
+    case '/ostohistoria':
         if ($loggeduser) {
             require_once MODEL_DIR . 'osto.php';
             $idhenkilo = $loggeduser['idhenkilo'];
@@ -117,7 +126,8 @@ switch ($request) {
         } else {
             header("Location: kirjaudu.php");
         }
-        break;
+    break;
+
     case "/logout":
         require_once CONTROLLER_DIR . 'kirjaudu.php';
         logout();
@@ -142,13 +152,80 @@ switch ($request) {
             // Tarkistetaan, onko lomakkeelta lähetetty tietoa.
             if (isset($formdata['laheta'])) {    
         
-              // TODO vaihtoavaimen tilauskäsittely
+              require_once MODEL_DIR . 'henkilo.php';
+              // Tarkistetaan, onko lomakkeelle syötetty käyttäjätili olemassa.
+              $user = haeHenkilo($formdata['email']);
+              if ($user) {
+                // Käyttäjätili on olemassa.
+                // Luodaan salasanan vaihtolinkki ja lähetetään se sähköpostiin.
+                require_once CONTROLLER_DIR . 'tili.php';
+                $tulos = luoVaihtoavain($formdata['email'],$config['urls']['baseUrl']);
+                if ($tulos['status'] == "200") {
+                  // Vaihtolinkki lähetty sähköpostiin, tulostetaan ilmoitus.
+                  echo $templates->render('tilaa_vaihtoavain_lahetetty');
+                  break;
+                }
+                // Vaihtolinkin lähetyksessä tapahtui virhe, tulostetaan
+                // yleinen virheilmoitus.
+                echo $templates->render('virhe');
+                break;
+              } else {
+                // Tunnusta ei ollut, tulostetaan ympäripyöreä ilmoitus.
+                echo $templates->render('tilaa_vaihtoavain_lahetetty');
+                break;
+              }
         
             } else {
               // Lomakeelta ei ole lähetetty tietoa, tulostetaan lomake.
               echo $templates->render('tilaa_vaihtoavain_lomake');
             }
             break;
+            case "/reset":
+              // Otetaan vaihtoavain talteen.
+              $resetkey = $_GET['key'];
+        
+              // Seuraavat tarkistukset tarkistavat, että onko vaihtoavain
+              // olemassa ja se on vielä aktiivinen. Jos ei, niin tulostetaan
+              // käyttäjälle virheilmoitus ja poistutaan.
+              require_once MODEL_DIR . 'henkilo.php';
+              $rivi = tarkistaVaihtoavain($resetkey);
+              if ($rivi) {
+                // Vaihtoavain löytyi, tarkistetaan onko se vanhentunut.
+                if ($rivi['aikaikkuna'] < 0) {
+                  echo $templates->render('reset_virhe');
+                  break;
+                }
+              } else {
+                echo $templates->render('reset_virhe');
+                break;
+              }
+        
+              // Vaihtoavain on voimassa, tarkistetaan onko lomakkeen kautta
+              // syötetty tietoa.
+              $formdata = cleanArrayData($_POST);
+              if (isset($formdata['laheta'])) {
+        
+        // Lomakkeelle on syötetty uudet salasanat, annetaan syötteen
+        // käsittely kontrollerille.
+        require_once CONTROLLER_DIR . 'tili.php';
+        $tulos = resetoiSalasana($formdata,$resetkey);
+        // Tarkistetaan kontrollerin tekemän salasanaresetoinnin lopputulos.
+        if ($tulos['status'] == "200") {
+          // Salasana vaihdettu, tulostetaan ilmoitus.
+          echo $templates->render('reset_valmis');
+          break;
+        }
+        // Salasanan vaihto ei onnistunut, tulostetaan lomake virhetekstin kanssa.
+        echo $templates->render('reset_lomake', ['error' => $tulos['error']]);
+        break;
+        
+              } else {
+                // Lomakkeen tietoja ei ole vielä täytetty, tulostetaan lomake.
+                echo $templates->render('reset_lomake', ['error' => '']);
+                break;
+              }
+        
+    break;
     default:
       echo $templates->render('notfound');
   }    
